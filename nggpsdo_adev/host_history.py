@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 """Small per-user history of device addresses; no credentials or URLs."""
 import json
 import os

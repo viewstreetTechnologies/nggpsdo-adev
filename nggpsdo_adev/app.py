@@ -506,7 +506,7 @@ class App:
         ymin = math.floor(math.log10(min(v for t, v in positive)))
         ymax = max(ymin+1, math.ceil(math.log10(max(v for t, v in positive))))
         font = tkfont.nametofont("TkDefaultFont")
-        left = max(left, max(font.measure(axis_number(10**power))
+        left = max(left, max(font.measure(f"10^{power}")
                              for power in range(ymin, ymax+1)) + 50)
         self.plot_bounds = (left, right, top, bottom, xmin, xmax, full_limits)
         def xy(t, v):
@@ -516,11 +516,11 @@ class App:
             power = xmin + tick/4*(xmax-xmin)
             x, _ = xy(10**power, 10**ymin)
             c.create_line(x, top, x, bottom, fill="#30435b")
-            c.create_text(x, bottom+16, text=axis_number(10**power, 3), fill="#dbe7f5")
+            c.create_text(x, bottom+16, text=f"10^{power:.3g}", fill="#dbe7f5")
         for power in range(ymin, ymax+1):
             _, y = xy(10**xmin, 10**power)
             c.create_line(left, y, right, y, fill="#30435b")
-            c.create_text(left-8, y, text=axis_number(10**power), anchor="e", fill="#dbe7f5")
+            c.create_text(left-8, y, text=f"10^{power}", anchor="e", fill="#dbe7f5")
         previous = None
         term_counts = {tau: terms for tau, _, terms in points}
         for tau, value in positive:

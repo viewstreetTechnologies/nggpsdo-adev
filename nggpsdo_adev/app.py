@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 """Dependency-free Tk desktop interface."""
 import csv
 from decimal import Decimal

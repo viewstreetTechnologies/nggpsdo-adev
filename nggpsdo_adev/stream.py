@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 """Bounded SSE decoding and reconnecting NGGPSDO transport."""
 import json
 import queue

@@ -5,6 +5,12 @@ control voltage and OCXO temperature. Show/hide each trace independently using
 its checkbox. All three are initially visible, each with a separate color and
 vertical scale. Frequency is displayed as offset from nominal in Hz.
 
+## Screenshot
+
+![NGGPSDO ADEV Monitor showing live frequency, control voltage and OCXO temperature with pinned measurements](docs/images/time-plot.jpg)
+
+Live time plot with independent trace scales and pinned measurement comparisons.
+
 ## Run
 
 Requires Python 3.10+ with Tk (included in the standard Windows installer).

@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 """Export the plotted canvas as a standalone SVG without screenshot dependencies."""
 import xml.etree.ElementTree as ET
 from tkinter import font as tkfont

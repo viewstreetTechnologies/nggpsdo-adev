@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nggpsdo-adev"
+version = "0.18.3"
+description = "Live Allan deviation monitor for NGGPSDO hardware over SSE"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+
+[project.gui-scripts]
+nggpsdo-adev = "nggpsdo_adev.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nggpsdo_adev*"]

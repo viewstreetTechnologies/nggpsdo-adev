@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 import io
 import math
 import unittest

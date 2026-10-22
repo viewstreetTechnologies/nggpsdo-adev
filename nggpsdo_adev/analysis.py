@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Viewstreet Technologies
+# SPDX-License-Identifier: MIT
+
 """Gap-aware overlapping Allan deviation of fractional frequency samples."""
 import math
 from collections import deque

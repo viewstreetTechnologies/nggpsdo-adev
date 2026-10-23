@@ -77,6 +77,10 @@ Alternatively install with `python -m pip install .` and run `nggpsdo-adev`.
 
 ## Connection
 
+For custom clients and integration details, see the
+[SSE protocol specification](docs/sse-protocol.md), including message fields,
+validity flags, historical replay and reconnection.
+
 The compact Hostname / IP field is an editable dropdown. Connect remembers the
 ten most recent validated addresses and their ports, including connection
 attempts. Selecting a host restores its port; startup restores the latest entry.

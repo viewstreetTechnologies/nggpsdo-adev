@@ -1,11 +1,54 @@
 # NGGPSDO ADEV Monitor
 
-Version **0.18.3** provides ADEV, MDEV, HDEV and one combined time plot for NGGPSDO SSE frequency measurements,
-control voltage and OCXO temperature. Show/hide each trace independently using
-its checkbox. All three are initially visible, each with a separate color and
-vertical scale. Frequency is displayed as offset from nominal in Hz.
+NGGPSDO ADEV Monitor is an open-source desktop application for live monitoring
+and frequency stability analysis of the NGGPSDO hardware device from
+[Viewstreet Technologies](https://www.viewstreet.com/).
 
-## Screenshot
+The application combines live Allan deviation (ADEV) graphing with direct replay
+of historical measurements stored on the hardware. Users can reconnect and
+review measurements collected over days or weeks, depending on the device's
+configured retention and available storage, without leaving a computer connected
+or first capturing a CSV file. Retained history is replayed over the network and
+followed by live measurements in the same session.
+
+Long-term history lets users investigate how frequency stability develops over
+longer averaging times, identify stability floors and changing trends, and review
+oscillator behaviour during warm-up and settling. Viewing frequency alongside
+OCXO temperature and control voltage helps reveal correlations with thermal
+conditions and controller activity. Historical replay also supports investigation
+of intermittent disturbances and comparison of operating periods before and
+after a restart or adjustment. Capture takes place on the hardware independently
+of the application: the computer does not need to remain connected or running.
+Users can connect later to retrieve and analyse the retained measurements.
+These views help users assess repeatability and distinguish short-lived
+fluctuations from sustained changes; correlations alone do not establish a cause.
+
+The hardware's persistent measurement journal supports recovery across device
+restarts and power cycles. The client reconnects automatically after connection
+loss and requests continuation from its last received event within the active
+session. Measurement gaps and restarts are treated as separate analysis runs,
+so stability calculations do not bridge interruptions.
+
+Modified Allan deviation (MDEV) and Hadamard deviation (HDEV) provide additional
+views of frequency stability across averaging times. A combined time plot
+displays frequency offset, OCXO temperature and control voltage, helping users
+examine frequency behaviour alongside operating conditions.
+
+Interactive zoom, pan and pinned measurement comparisons support detailed
+inspection. Users can record measurements to CSV, reopen recordings for analysis,
+and export graph data or SVG images for reporting and further investigation.
+Analysis uses device measurement timestamps and separates discontinuous data into
+independent runs.
+
+Written in Python with a Tk desktop interface, the application requires no
+third-party runtime packages. The current version is **0.18.3**.
+
+## Screenshots
+
+![NGGPSDO ADEV Monitor showing live Allan deviation with logarithmic decade labels](docs/images/adev.jpg)
+
+Live Allan deviation analysis of NGGPSDO frequency measurements, with logarithmic
+axes, averaging times and overlapping term counts.
 
 ![NGGPSDO ADEV Monitor showing live frequency, control voltage and OCXO temperature with pinned measurements](docs/images/time-plot.jpg)
 
@@ -41,6 +84,27 @@ Choose **Live only** for new measurements or **0** in After event ID for retaine
 history. A custom ID resumes after that ID. Replay interval is in milliseconds;
 it affects delivery pacing, not measurement timing. Hostname and port are separate fields; the URL and query string are not shown. Automatic reconnect uses Last-Event-ID within the active
 session. A fresh Connect clears the analysis window.
+
+### Historical replay and recovery
+
+With SD journaling enabled on the device, measurements are retained independently
+of the desktop application. Select **0** in After event ID to replay available
+history, or enter an event ID to continue after a particular point. Replay pacing
+controls delivery speed; analysis always uses the original measurement timestamps.
+
+Available hardware history depends on the configured journal retention and
+storage. Histories spanning days or weeks can be replayed directly from the
+device. The desktop analysis window holds
+the latest 200,000 accepted samples (approximately 9.3 days of continuous
+four-second measurements), rather than the entire device archive at once.
+
+After a power cycle, the hardware recovers valid journal records and rebuilds its
+index. Previously committed history remains available for replay; incomplete or
+corrupt journal tails are discarded. Abrupt power loss can lose records not yet
+flushed to storage, and no measurements are taken while the device is powered off.
+The client separates discontinuities into independent analysis runs. Reconnecting
+within an active client session uses its last event ID; after restarting the
+application, select history replay again to retrieve retained measurements.
 
 ## Plot and display
 

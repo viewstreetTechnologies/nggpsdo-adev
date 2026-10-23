@@ -28,6 +28,11 @@ def axis_number(value, precision=6):
     return label.rstrip("0").rstrip(".") if "." in label else label
 
 
+def decade_label(power):
+    """Render a power of ten with a superscript integer exponent."""
+    return "10" + str(power).translate(str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹"))
+
+
 FIELDS = ["sampleNumber", "endTimeUnixMs", "intervalUs", "frequencyHz",
           "nominalHz", "flags", "eventId", "ocxoTemperatureC", "controlVoltageV",
           "controllerFrequencyHz", "controllerFilterLevel"]
@@ -506,21 +511,33 @@ class App:
         ymin = math.floor(math.log10(min(v for t, v in positive)))
         ymax = max(ymin+1, math.ceil(math.log10(max(v for t, v in positive))))
         font = tkfont.nametofont("TkDefaultFont")
-        left = max(left, max(font.measure(f"10^{power}")
+        left = max(left, max(font.measure(decade_label(power))
                              for power in range(ymin, ymax+1)) + 50)
         self.plot_bounds = (left, right, top, bottom, xmin, xmax, full_limits)
         def xy(t, v):
             return (left+(math.log10(t)-xmin)/(xmax-xmin)*(right-left),
                     bottom-(math.log10(v)-ymin)/(ymax-ymin)*(bottom-top))
-        for tick in range(5):
-            power = xmin + tick/4*(xmax-xmin)
+        for power in range(math.floor(xmin), math.ceil(xmax)+1):
+            for multiplier in range(2, 10):
+                minor = power + math.log10(multiplier)
+                if xmin <= minor <= xmax:
+                    x, _ = xy(10**minor, 10**ymin)
+                    c.create_line(x, bottom, x, bottom-4, fill="#8495a8")
+            if not xmin <= power <= xmax:
+                continue
             x, _ = xy(10**power, 10**ymin)
             c.create_line(x, top, x, bottom, fill="#30435b")
-            c.create_text(x, bottom+16, text=f"10^{power:.3g}", fill="#dbe7f5")
+            c.create_line(x, bottom, x, bottom-7, fill="#8495a8")
+            c.create_text(x, bottom+16, text=decade_label(power), fill="#dbe7f5")
         for power in range(ymin, ymax+1):
+            if power < ymax:
+                for multiplier in range(2, 10):
+                    _, minor_y = xy(10**xmin, multiplier*10**power)
+                    c.create_line(left, minor_y, left+4, minor_y, fill="#8495a8")
             _, y = xy(10**xmin, 10**power)
             c.create_line(left, y, right, y, fill="#30435b")
-            c.create_text(left-8, y, text=f"10^{power}", anchor="e", fill="#dbe7f5")
+            c.create_line(left, y, left+7, y, fill="#8495a8")
+            c.create_text(left-8, y, text=decade_label(power), anchor="e", fill="#dbe7f5")
         previous = None
         term_counts = {tau: terms for tau, _, terms in points}
         for tau, value in positive:

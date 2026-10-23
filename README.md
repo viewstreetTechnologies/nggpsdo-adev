@@ -56,6 +56,16 @@ Live time plot with independent trace scales and pinned measurement comparisons.
 
 ## Run
 
+### Windows portable application
+
+Download `NGGPSDO-ADEV-Monitor-0.18.3-Windows-x64.zip` from
+[GitHub Releases](https://github.com/viewstreetTechnologies/nggpsdo-adev/releases/latest),
+extract the ZIP, and run `NGGPSDO-ADEV-Monitor.exe`. Python installation is not
+required. The download includes the application license and bundled runtime
+notices. This Windows x64 build is not code-signed.
+
+### Run from Python source
+
 Requires Python 3.10+ with Tk (included in the standard Windows installer).
 No third-party runtime packages are needed. From this directory:
 
@@ -229,6 +239,8 @@ frequency fluctuations. Displaying a temperature plateau does not establish
 frequency lock.
 
 ## Development
+
+Windows executable build instructions are in [packaging/README.md](packaging/README.md).
 
 ```powershell
 python -m unittest discover -s tests -v

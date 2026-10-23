@@ -41,7 +41,7 @@ Analysis uses device measurement timestamps and separates discontinuous data int
 independent runs.
 
 Written in Python with a Tk desktop interface, the application requires no
-third-party runtime packages. The current version is **0.18.3**.
+third-party runtime packages. The current version is **0.18.4**.
 
 ## Screenshots
 
@@ -58,7 +58,7 @@ Live time plot with independent trace scales and pinned measurement comparisons.
 
 ### Windows portable application
 
-Download `NGGPSDO-ADEV-Monitor-0.18.3-Windows-x64.zip` from
+Download `NGGPSDO-ADEV-Monitor-0.18.4-Windows-x64.zip` from
 [GitHub Releases](https://github.com/viewstreetTechnologies/nggpsdo-adev/releases/latest),
 extract the ZIP, and run `NGGPSDO-ADEV-Monitor.exe`. Python installation is not
 required. The download includes the application license and bundled runtime
@@ -256,6 +256,10 @@ Source repository: [viewstreetTechnologies/nggpsdo-adev](https://github.com/view
 
 This Python client is released under the [MIT License](LICENSE).
 This license applies to this standalone client; firmware licensing is separate.
+
+The Viewstreet Technologies name and logos are excluded from the MIT license.
+Copyright in the logo artwork belongs to Viewstreet Technologies. See the
+[branding asset notes](nggpsdo_adev/assets/README.md).
 
 ### Frequency traces
 

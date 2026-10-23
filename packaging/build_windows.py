@@ -42,7 +42,9 @@ def build():
         f"kids=[StringFileInfo([StringTable('040904B0',[{entries}])]),"
         "VarFileInfo([VarStruct('Translation',[1033,1200])])])", encoding="utf-8")
     subprocess.run([sys.executable, "-m", "PyInstaller", "--noconfirm", "--clean",
-                    "--onefile", "--windowed", "--noupx", "--icon", "NONE",
+                    "--onefile", "--windowed", "--noupx", "--icon",
+                    str(root / "nggpsdo_adev" / "assets" / "viewstreet.ico"),
+                    "--add-data", str(root / "nggpsdo_adev" / "assets") + ";nggpsdo_adev/assets",
                     "--name", name, "--paths", str(root),
                     "--version-file", str(resource), "--workpath", str(work / "pyinstaller"),
                     "--specpath", str(work), "--distpath", str(root / "dist"),
@@ -53,6 +55,8 @@ def build():
     notices.mkdir(parents=True, exist_ok=True)
     shutil.copy2(root / "dist" / (name + ".exe"), release / (name + ".exe"))
     shutil.copy2(root / "LICENSE", release / "LICENSE.txt")
+    shutil.copy2(root / "nggpsdo_adev" / "assets" / "README.md",
+                 notices / "Viewstreet-branding.txt")
     python_root = Path(sys.base_prefix)
     shutil.copy2(python_root / "LICENSE.txt", notices / "Python-LICENSE.txt")
     # This official Python documentation includes licenses of incorporated libraries.

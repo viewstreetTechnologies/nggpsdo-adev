@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nggpsdo-adev"
-version = "0.18.3"
+version = "0.18.4"
 description = "Live Allan deviation monitor for NGGPSDO hardware over SSE"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -16,3 +16,6 @@ nggpsdo-adev = "nggpsdo_adev.app:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["nggpsdo_adev*"]
+
+[tool.setuptools.package-data]
+nggpsdo_adev = ["assets/*.png", "assets/*.ico", "assets/README.md"]

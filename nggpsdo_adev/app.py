@@ -6,7 +6,9 @@ import csv
 from decimal import Decimal
 import math
 import queue
+import sys
 import time
+import webbrowser
 import tkinter as tk
 from tkinter import font as tkfont
 import ipaddress
@@ -74,6 +76,8 @@ class App:
     def __init__(self, root):
         self.root = root
         root.title(f"NGGPSDO ADEV Monitor v{__version__}")
+        self.app_icon = tk.PhotoImage(file=str(Path(__file__).parent / "assets" / "viewstreet.png"))
+        root.iconphoto(True, self.app_icon)
         menu = tk.Menu(root)
         file_menu = tk.Menu(menu, tearoff=False)
         file_menu.add_command(label="Start CSV recording…", command=self.record_csv)
@@ -85,6 +89,10 @@ class App:
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.close)
         menu.add_cascade(label="File", menu=file_menu)
+        help_menu = tk.Menu(menu, tearoff=False)
+        help_menu.add_command(label="About NGGPSDO ADEV Monitor…", command=self.show_about)
+        menu.add_cascade(label="Help", menu=help_menu)
+        self.about_window = None
         root.configure(menu=menu)
         self.analysis = Analysis()
         self.client = None
@@ -235,6 +243,58 @@ class App:
         root.protocol("WM_DELETE_WINDOW", self.close)
         self.fit_window()
         root.after(100, self.poll)
+
+    def show_about(self):
+        if self.about_window is not None and self.about_window.winfo_exists():
+            self.about_window.lift()
+            self.about_window.focus_set()
+            return
+        dialog = tk.Toplevel(self.root)
+        self.about_window = dialog
+        dialog.title("About NGGPSDO ADEV Monitor")
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        body = ttk.Frame(dialog, padding=24)
+        body.grid(sticky="nsew")
+        logo = tk.PhotoImage(file=str(Path(__file__).parent / "assets" / "viewstreet-about.png"))
+        scale = max(1, math.ceil(logo.width() / 400))
+        self.about_logo = logo.subsample(scale)
+        tk.Label(body, image=self.about_logo, background="#101820",
+                 padx=16, pady=12, borderwidth=0).grid(sticky="ew", pady=(0, 16))
+        ttk.Label(body, text="NGGPSDO ADEV Monitor",
+                  font="TkHeadingFont").grid(sticky="w")
+        ttk.Label(body, text=f"Version {__version__}").grid(sticky="w", pady=(4, 12))
+        ttk.Label(body, text="Live frequency stability analysis and hardware history replay",
+                  wraplength=400).grid(sticky="w")
+        ttk.Label(body, text="Copyright © 2026 Viewstreet Technologies\nMIT License").grid(
+            sticky="w", pady=(12, 8))
+        website = "https://www.viewstreet.com/"
+
+        def open_website(event=None):
+            try:
+                opened = webbrowser.open(website)
+            except webbrowser.Error:
+                opened = False
+            if not opened:
+                messagebox.showinfo("Viewstreet Technologies",
+                                    f"Open this address in your browser:\n{website}",
+                                    parent=dialog)
+            return "break"
+
+        link = ttk.Label(body, text="www.viewstreet.com", foreground="#0868b2",
+                         cursor="hand2", takefocus=True)
+        link.grid(sticky="w", pady=(0, 12))
+        link.bind("<Button-1>", open_website)
+        link.bind("<Return>", open_website)
+        link.bind("<space>", open_website)
+        runtime = "Windows portable executable" if getattr(sys, "frozen", False) else "Python source"
+        ttk.Label(body, text=f"{runtime}\nPython {sys.version.split()[0]}\n"
+                  f"Tcl {self.root.tk.call('info', 'patchlevel')} / "
+                  f"Tk {self.root.getvar('tk_patchLevel')}").grid(sticky="w")
+        close = ttk.Button(body, text="Close", command=dialog.destroy)
+        close.grid(sticky="e", pady=(16, 0))
+        dialog.bind("<Escape>", lambda event: dialog.destroy())
+        close.focus_set()
 
     def fit_window(self):
         self.root.update_idletasks()
